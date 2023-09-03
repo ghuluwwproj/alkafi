@@ -1,0 +1,7 @@
+cliffs_delta==1.0.0
+matplotlib==3.7.1
+networkx==3.1
+pandas==1.5.3
+scipy==1.11.2
+tqdm==4.66.1
+SQLAlchemy<2.0.0
