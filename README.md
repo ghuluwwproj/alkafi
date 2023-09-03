@@ -12,7 +12,7 @@ The focus of the present study is the concept of ghuluww (to transgress a bounda
 
 ## How to Run
 
-Follow the instruction on [this](https://colab.research.google.com/drive/1qvpvJxSif2aIswGVVOuDI2K1G-Tbw8yR?usp=sharing) Jupyter notebook.
+Follow the instructions on [this](https://colab.research.google.com/drive/1qvpvJxSif2aIswGVVOuDI2K1G-Tbw8yR?usp=sharing) Jupyter notebook.
 
 ## Database Tables Documentation
 
