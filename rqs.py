@@ -1,7 +1,8 @@
+from multiprocessing import Pool
 from os import path
 from collections import defaultdict
 import os
-from typing import List
+from typing import List, Tuple
 import pickle
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -10,7 +11,7 @@ from scipy.stats import mannwhitneyu
 from cliffs_delta import cliffs_delta
 from tqdm import tqdm
 
-from utils import *
+from utils import read_commented_plain_text, get_yes_no, IsnadSet
 
 DB_URL = 'sqlite:///data/isnads-kafi.sqlite'
 ACCUSED_IDs_IBN_QADAERI = read_commented_plain_text('data/accused-ibn-qadairi.txt', int)
@@ -24,6 +25,20 @@ ABLATION = False
 if ABLATION:
     print('*** NOTE: ABLATION  STUDY ***')
 full_hid_books_dict = isnadsets_full.get_hadith_books_dict()
+
+N_PROCESSES = 10
+
+def f(self, isnadsets_full, ys_all, i, W):
+    ys_hi = self.get_hist_by_hadith(isnadsets_full, i, W)
+    stat, p = mannwhitneyu(ys_hi, ys_all)        
+    if p < .05:
+        d, res = cliffs_delta(ys_hi, ys_all)
+        #if res == 'large':
+        if d >= 0.474:
+        #ds.append(d)
+            hid = isnadsets_full.hadiths_list[i]
+            return (hid,d,res,p,stat,ys_hi)
+    return None
 
 class RQ:
     """Base class of all Research Questions"""
@@ -83,23 +98,19 @@ class RQ:
             if not ans:
                 ans = get_yes_no('Are you kidding? [y/n] ')
         
+        ys_all = None
+        
+        
         if not ans:
             hists = []
-            us, ps, ds = [], [], []
             ys_all = self.get_hist_all(isnadsets_full, W)
-            for i in tqdm(range(NUM_H)):
-                ys_hi = self.get_hist_by_hadith(isnadsets_full, i, W)
-                stat, p = mannwhitneyu(ys_hi, ys_all)
-                ps.append(p)
-                if p < .05:
-                    d, res = cliffs_delta(ys_hi, ys_all)
-                    #if res == 'large':
-                    if d >= 0.474:
-                    #ds.append(d)
-                        hid = isnadsets_full.hadiths_list[i]
-                        hists.append((hid,d,res,p,stat,ys_hi))
-            
+                
+            with Pool(processes=N_PROCESSES) as pool:
+                args = [(self, isnadsets_full, ys_all, i, W) for i in range(NUM_H)]
+                hists = pool.starmap(f, args)
+                # hists = list(tqdm(pool.imap(f, range(0,NUM_H)), total=NUM_H))
             # Sort hists by cliff-d
+            hists = [h for h in hists if h is not None]
             hists = sorted(hists, key=lambda e: e[1], reverse=True)
             os.makedirs('pickles', exist_ok=True)
             pickle.dump(hists, open(pickle_fn, 'wb'))
@@ -112,6 +123,16 @@ class RQ:
         Note: values in each chapter are normalized by chapter's length, so technically this is not a histogram. 
         """
         hists = all_hists[aslice]
+        D = self.get_books_bars(hists)
+        plt.figure()
+        plt.bar(range(len(D)), list(D.values()), align='center')
+        plt.xticks(range(len(D)), list(D.keys()), rotation=90)
+        plt.xlabel('Book name')
+        plt.ylabel('Normalized frequency')
+        plt.title(f'Chapters of top-{aslice.stop} {self.tag} hadiths (W={W})')
+        plt.tight_layout()
+
+    def get_books_bars(self, hists):
         hid_books_dict = isnadsets_full.get_hadith_books_dict()
         book_lens = defaultdict(int)
         # bhdis_dict_debug = defaultdict(list)
@@ -128,16 +149,10 @@ class RQ:
         book_counter_norm = {k: v for k,v in 
                              sorted(book_counter_norm.items(), key=lambda e: e[1], reverse=True)}
         
-        plt.figure()
         df = pd.read_csv('data/book-names-to-en.csv')
         en_names = pd.Series(df['en-name'].values,index=df['ar-name']).to_dict()
         D = {en_names[k]:book_counter_norm[k] for k in book_counter_norm.keys()}
-        plt.bar(range(len(D)), list(D.values()), align='center')
-        plt.xticks(range(len(D)), list(D.keys()), rotation=90)
-        plt.xlabel('Book name')
-        plt.ylabel('Normalized frequency')
-        plt.title(f'Chapters of top-{aslice.stop} {self.tag} hadiths (W={W})')
-        plt.tight_layout()
+        return D
 
     def draw_time_series_plot(self, Ws: List[int]):
         plt.figure()
@@ -198,7 +213,7 @@ class RQ2(RQ):
     
 if __name__ == '__main__':
     rq1 = RQ1()
-    rq1.run([20, 120])
+    rq1.run([20, 40, 60])
                     
-    rq2 = RQ2([20, 120])
-    rq2.run([20, 120])
+    rq2 = RQ2()
+    rq2.run([20, 40, 60])
