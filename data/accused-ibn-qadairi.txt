@@ -1,18 +1,28 @@
+# According to https://docs.google.com/spreadsheets/d/1QhAKeKWRhztRWkMd-7I77VF5kEMeHXS0dAQU0vG4oYM/edit#gid=0
 509
 183
 53 
+# Jahdar b. Muqira NOT PRESEENT
 599 
+# Ja'far b. Ismail al-Manqari NOT PRESEENT
+# Ja'far b. Ma'ruf NOT PRESEENT
 110
 356
 230
+# Khalf b. Mohammad NOT PRESEENT
+# Sulayman b. Zakariyya NOT PRESEENT
 430
 296
-2733
+2733 # Abd Allah b. BUKAYR (NOT BAKR)
 834
+# Abd Allah b. Salim NOT PRESEENT
 237
 467
-473
+473 # AL-HASHIMI
 496
+# Abd al-Rahman b. abi Hammad NOT PRESEENT
+# Ali b. Ahmad NOT PRESEENT
+# Ali b. Abd Allah NOT PRESEENT
 3183
 72
 556
@@ -24,8 +34,12 @@
 158
 499
 2334
-1491
+1491 # BOTH for Muhammad b. Mihran
 3248
 911 
+# Mu'alla b. Rashid NOT PRESEENT
+# Muhammad b. Bahr NOT PRESEENT
 3102
+# Yunus b. Bahman NOT PRESEENT
+# Yusuf b. Ya'ghub NOT PRESEENT
 2147
