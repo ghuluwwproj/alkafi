@@ -100,7 +100,6 @@ class RQ:
         
         ys_all = None
         
-        
         if not ans:
             hists = []
             ys_all = self.get_hist_all(isnadsets_full, W)
@@ -117,7 +116,7 @@ class RQ:
         
         return pickle.load(open(pickle_fn, 'rb'))
         
-    def draw_books_hist(self, all_hists: List, aslice: slice, W: int):
+    def draw_books_hist(self, all_hists: List, aslice: slice, W: int, color: str):
         """ Plot the distribution of elements of a hists (as returned by load_hists) over al-Kafi chapters.
         
         Note: values in each chapter are normalized by chapter's length, so technically this is not a histogram. 
@@ -125,7 +124,7 @@ class RQ:
         hists = all_hists[aslice]
         D = self.get_books_bars(hists)
         plt.figure()
-        plt.bar(range(len(D)), list(D.values()), align='center')
+        plt.bar(range(len(D)), list(D.values()), align='center', color=color)
         plt.xticks(range(len(D)), list(D.keys()), rotation=90)
         plt.xlabel('Book name')
         plt.ylabel('Normalized frequency')
@@ -154,11 +153,11 @@ class RQ:
         D = {en_names[k]:book_counter_norm[k] for k in book_counter_norm.keys()}
         return D
 
-    def draw_time_series_plot(self, Ws: List[int]):
+    def draw_time_series_plot(self, Ws: List[int], colors: List[str]):
         plt.figure()
-        for W in Ws:
+        for W, color in zip(Ws, colors):
             ys = self.get_hist_all(isnadsets_full, W)
-            plt.plot(range(1, len(ys)+1), ys, label=f'W={W}')
+            plt.plot(range(1, len(ys)+1), ys, label=f'W={W}', color=color)
         plt.xlabel('Windows number')
         plt.ylabel('Percent')
         plt.title(f'Percent of {self.tag} hadiths over whole al-Kafi')
@@ -170,14 +169,15 @@ class RQ:
         Args:
             Ws: A list of window sizes.
         """
-        for W in Ws:
+        colors = ['blue', 'red', 'green']
+        for Wi, W in enumerate(Ws):
             print(f'W={W}')
             hists = self.load_hists(W)
-            self.draw_books_hist(hists, slice(0, 1000), W)
-            self.draw_books_hist(hists, slice(0, 2000), W)
-            self.draw_books_hist(hists, slice(0, 3000), W)
+            self.draw_books_hist(hists, slice(0, 1000), W, colors[Wi])
+            self.draw_books_hist(hists, slice(0, 2000), W, colors[Wi])
+            self.draw_books_hist(hists, slice(0, 3000), W, colors[Wi])
 
-        self.draw_time_series_plot(Ws)
+        self.draw_time_series_plot(Ws, colors)
         plt.show()    
 
 class RQ1(RQ):
