@@ -1,10 +1,10 @@
 # Ghuluww (Exaggeration) in al-Kāfī: A Data-Analytic Approach
 ## Authors
-Kaveh Aryanpoo<sup>1</sup>, Mohammad Reza Mousavi<sup>1</sup>, ​1 Mostafa Movahedifar<sup>2</sup>
+Mostafa Movahedifar<sup>1</sup>, Kaveh Aryanpoo<sup>2</sup>, Mohammad Reza Mousavi<sup>2</sup>
 
 
 
-<sup><sup>1</sup> King’s College London, London, UK</sup>  <sup>   </sup>   <sup><sup>2</sup> Al-Mahdi Institute, Birmingham, UK</sup>
+<sup><sup>1</sup> Al-Mahdi Institute, Birmingham, UK</sup> <sup><sup>2</sup> King’s College London, London, UK</sup>  <sup>   </sup>   
 
 ## Abstract
 The focus of the present study is the concept of ghuluww (to transgress a boundary) tendency and the ḥadīth content ascribed to this tendency. We designate ḥadīth transmitters that were labelled as the subscribers of the idea of ghuluww, called ghulāt (sing. ghālī; transgressive Shīʿīs), who lived in the early Islamic era, especially during the Imamates of the fifth and sixth Shīʿī Imāms, Muḥammad b. Alī al-Bāqir (d. 114/733) and Jafar b. Muḥammad al-Sādiq (d. 148/765). We examine such associations considering the 5th/11th-century bio-bibliographical dictionaries.
